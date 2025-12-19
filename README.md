@@ -1,9 +1,10 @@
 # Christmasdailygift
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christmas Wishes & Sheets 🎄</title>
+    <title>Christmas Wishes 🎄</title>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Poppins:wght@300;400;600&display=swap');
@@ -38,7 +39,6 @@
             text-align: center;
         }
 
-        /* Countdown Style */
         .countdown-wrapper {
             display: flex;
             gap: 10px;
@@ -59,7 +59,6 @@
         .time-card .num { display: block; font-size: 1.8rem; font-weight: 600; }
         .time-card .label { font-size: 0.6rem; color: var(--gold); text-transform: uppercase; }
 
-        /* Card Container */
         .wish-container {
             background: rgba(255, 255, 255, 0.95);
             color: #333;
@@ -98,14 +97,17 @@
             transition: 0.3s;
             font-size: 1rem;
             margin-top: 15px;
+            background: #25d366;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .btn-primary { background: var(--red); color: white; }
-        .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
-        .btn-whatsapp { background: #25d366; color: white; }
-        .btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-2px); }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+        .btn:hover:not(:disabled) { background: #128c7e; transform: translateY(-2px); }
 
-        /* Snow Effect */
         .snow {
             position: fixed; top: -10px; color: white;
             pointer-events: none; z-index: 9999;
@@ -126,39 +128,27 @@
     </div>
 
     <div class="wish-container">
-        <div id="formSection">
-            <h2>Kirim Kartu Ucapan 🎄</h2>
-            <form id="waForm">
-                <label>Nomor WhatsApp Tujuan:</label>
-                <input type="tel" id="nomorTujuan" placeholder="Contoh: 08123456789" required>
-                
-                <label>Nama Pengirim (Anda):</label>
-                <input type="text" id="nama" placeholder="Nama Anda" required>
-                
-                <label>Pesan Ucapan:</label>
-                <textarea id="pesan" rows="3" placeholder="Selamat Natal..." required></textarea>
-                
-                <button type="submit" id="btnSubmit" class="btn btn-primary">Simpan & Siapkan ✨</button>
-            </form>
-        </div>
-
-        <div id="confirmSection" style="display: none; text-align: center;">
-            <div style="font-size: 3.5rem; margin-bottom: 10px;">🎁</div>
-            <h3 style="color: var(--red);">Data Tersimpan!</h3>
-            <p style="font-size: 0.9rem; margin-bottom: 20px; color: #555;">Pesan Anda sudah dicatat. Klik di bawah untuk mengirim ke WhatsApp.</p>
+        <h2>Kirim Ucapan Natal 🎄</h2>
+        <form id="waForm">
+            <label>Nomor WA Tujuan:</label>
+            <input type="tel" id="nomorTujuan" placeholder="Contoh: 08123456789" required>
             
-            <button id="btnKirimSekarang" class="btn btn-whatsapp">Kirim via WhatsApp</button>
+            <label>Nama Pengirim:</label>
+            <input type="text" id="nama" placeholder="Nama Anda" required>
             
-            <p onclick="window.location.reload()" style="margin-top: 20px; font-size: 0.75rem; color: #888; cursor: pointer; text-decoration: underline;">Tulis Baru</p>
-        </div>
+            <label>Pesan Ucapan:</label>
+            <textarea id="pesan" rows="3" placeholder="Selamat Natal..." required></textarea>
+            
+            <button type="submit" id="btnSubmit" class="btn">
+                <span>Kirim via WhatsApp ✨</span>
+            </button>
+        </form>
+        <p style="text-align: center; font-size: 0.7rem; color: #888; margin-top: 15px;">Data akan tersimpan secara otomatis.</p>
     </div>
 
     <script>
-        // ==========================================
         // 1. PENGATURAN (GANTI URL DI SINI)
-        // ==========================================
         const URL_GAS = "MASUKKAN_URL_GOOGLE_SCRIPT_DISINI"; 
-        let finalUrl = "";
 
         // 2. COUNTDOWN TIMER
         function updateTimer() {
@@ -174,58 +164,47 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // 3. LOGIKA FORM & GOOGLE SHEETS
+        // 3. LOGIKA KIRIM DATA & REDIRECT WA
         const form = document.getElementById('waForm');
         const btnSubmit = document.getElementById('btnSubmit');
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Loading state
-            btnSubmit.innerText = "Menyimpan ke Sheets...";
+            btnSubmit.innerHTML = "Sedang Memproses...";
             btnSubmit.disabled = true;
 
             let nomor = document.getElementById('nomorTujuan').value.replace(/\D/g, '');
             const nama = document.getElementById('nama').value;
             const pesan = document.getElementById('pesan').value;
 
-            // Format nomor ke internasional (62)
             if (nomor.startsWith('0')) { nomor = '62' + nomor.slice(1); }
 
-            // Menyiapkan data JSON
             const dataPayload = {
                 nomor: nomor,
                 nama: nama,
                 ucapan: pesan
             };
 
-            // Kirim ke Google Apps Script
+            // Menyiapkan Link WA
+            const teks = `Halo! 🎄%0A%0A*${pesan}*%0A%0A- Dari: *${nama}*%0A%0A✨ Selamat Natal ✨`;
+            const waUrl = `https://api.whatsapp.com/send?phone=${nomor}&text=${teks}`;
+
+            // Kirim ke Sheets secara "fire and forget" (tidak menunggu respon penuh)
             fetch(URL_GAS, {
                 method: 'POST',
-                mode: 'no-cors', // Menghindari masalah CORS di browser
+                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dataPayload)
-            })
-            .then(() => {
-                // Berhasil (atau setidaknya terkirim)
-                const teks = `Halo! 🎄%0A%0A*${pesan}*%0A%0A- Dari: *${nama}*%0A%0A✨ Selamat Natal ✨`;
-                finalUrl = `https://api.whatsapp.com/send?phone=${nomor}&text=${teks}`;
-
-                // Tukar tampilan
-                document.getElementById('formSection').style.display = 'none';
-                document.getElementById('confirmSection').style.display = 'block';
-            })
-            .catch(err => {
-                console.error(err);
-                alert("Gagal menyimpan data. Cek koneksi atau URL Script.");
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "Siapkan Pesan ✨";
             });
-        });
 
-        // Redirect ke WhatsApp
-        document.getElementById('btnKirimSekarang').addEventListener('click', function() {
-            window.open(finalUrl, '_blank');
+            // Langsung buka WhatsApp setelah jeda sangat singkat (agar fetch sempat terkirim)
+            setTimeout(() => {
+                window.location.href = waUrl;
+                // Mengembalikan tombol jika user kembali ke halaman ini
+                btnSubmit.innerHTML = "Kirim via WhatsApp ✨";
+                btnSubmit.disabled = false;
+            }, 800); 
         });
 
         // 4. EFEK SALJU
@@ -242,4 +221,4 @@
         }, 200);
     </script>
 </body>
-
+</html>
