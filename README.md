@@ -148,7 +148,7 @@
 
     <script>
         // 1. PENGATURAN (GANTI URL DI SINI)
-        const URL_GAS = "MASUKKAN_URL_GOOGLE_SCRIPT_DISINI"; 
+        const URL_GAS = "https://docs.google.com/spreadsheets/d/103iHl5YDNddyCnXAe-xeU0jN1dZmzGRMfCM0MhMR38w/edit"; 
 
         // 2. COUNTDOWN TIMER
         function updateTimer() {
