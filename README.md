@@ -2,11 +2,10 @@
 
 
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christmas Countdown & WhatsApp Wishes 🎄</title>
+    <title>Kirim Ucapan Natal ke Teman 🎄</title>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Poppins:wght@300;400;600&display=swap');
@@ -34,103 +33,82 @@
 
         h1 {
             font-family: 'Mountains of Christmas', cursive;
-            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
             color: var(--red);
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
             margin-bottom: 20px;
             text-align: center;
         }
 
-        /* Countdown */
         .countdown-wrapper {
             display: flex;
-            gap: 15px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
             justify-content: center;
         }
 
         .time-card {
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            border: 2px solid var(--gold);
-            border-radius: 15px;
-            padding: 15px;
-            min-width: 90px;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--gold);
+            border-radius: 10px;
+            padding: 10px;
+            min-width: 70px;
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        .time-card span.num {
-            display: block;
-            font-size: 2.5rem;
-            font-weight: 600;
-        }
+        .time-card .num { display: block; font-size: 1.8rem; font-weight: 600; }
+        .time-card .label { font-size: 0.6rem; color: var(--gold); text-transform: uppercase; }
 
-        .time-card span.label {
-            font-size: 0.75rem;
-            color: var(--gold);
-            text-transform: uppercase;
-        }
-
-        /* Form Wish Container */
         .wish-container {
             background: rgba(255, 255, 255, 0.95);
             color: #333;
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            text-align: center;
         }
 
         .wish-container h2 {
             font-family: 'Mountains of Christmas';
             color: var(--red);
-            font-size: 2.2rem;
+            text-align: center;
             margin-bottom: 15px;
         }
+
+        label { font-size: 0.85rem; font-weight: 600; color: var(--green); }
 
         input, textarea {
             width: 100%;
             padding: 12px;
-            margin: 10px 0;
+            margin: 5px 0 15px 0;
             border: 1px solid #ddd;
             border-radius: 10px;
             font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
         }
 
-        .btn-style {
+        .btn {
             width: 100%;
-            padding: 12px;
-            background: var(--red);
-            color: white;
+            padding: 14px;
             border: none;
             border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
             font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
 
-        .btn-wa { background: #25d366; }
-        .btn-wa:hover { background: #128c7e; }
+        .btn-primary { background: var(--red); color: white; }
+        .btn-whatsapp { background: #25d366; color: white; margin-top: 10px; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        /* Snow */
         .snow {
-            position: fixed;
-            top: -10px;
-            color: white;
-            pointer-events: none;
-            z-index: 9999;
+            position: fixed; top: -10px; color: white;
+            pointer-events: none; z-index: 9999;
             animation: fall linear forwards;
         }
-
         @keyframes fall { to { transform: translateY(105vh); } }
     </style>
 </head>
@@ -147,35 +125,38 @@
 
     <div class="wish-container">
         <div id="formSection">
-            <h2>Kirim Ucapan 🎄</h2>
-            <p style="margin-bottom: 15px; font-size: 0.9rem;">Isi formulir untuk mengirim ucapan Natal.</p>
+            <h2>Kirim Kartu Ucapan 🎄</h2>
             <form id="waForm">
-                <input type="text" id="nama" placeholder="Nama Anda" required>
-                <textarea id="pesan" rows="4" placeholder="Tulis ucapan selamat Natal..." required></textarea>
-                <button type="submit" class="btn-style">Buat Ucapan ✨</button>
+                <label>Nomor WhatsApp Tujuan:</label>
+                <input type="tel" id="nomorTujuan" placeholder="Contoh: 08123456789" required>
+                
+                <label>Nama Pengirim (Anda):</label>
+                <input type="text" id="nama" placeholder="Masukkan nama Anda" required>
+                
+                <label>Isi Ucapan:</label>
+                <textarea id="pesan" rows="3" placeholder="Tulis ucapan selamat Natal..." required></textarea>
+                
+                <button type="submit" class="btn btn-primary">Siapkan Pesan ✨</button>
             </form>
         </div>
 
-        <div id="confirmSection" style="display: none;">
-            <div style="font-size: 3.5rem; margin-bottom: 10px;">🎁</div>
-            <h3 style="color: var(--red); margin-bottom: 10px;">Ucapan Sudah Siap!</h3>
-            <p style="margin-bottom: 20px;">Silakan klik tombol di bawah untuk lanjut ke WhatsApp.</p>
-            <button id="btnKirimWA" class="btn-style btn-wa">Kirim Sekarang</button>
-            <p onclick="window.location.reload()" style="margin-top: 15px; font-size: 0.8rem; color: #777; cursor: pointer; text-decoration: underline;">Ulangi / Batal</p>
+        <div id="confirmSection" style="display: none; text-align: center;">
+            <div style="font-size: 3rem;">🎁</div>
+            <h3 style="color: var(--red); margin-bottom: 5px;">Pesan Siap!</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 20px;">Klik tombol di bawah untuk mengirim ke nomor tersebut.</p>
+            
+            <button id="btnKirimSekarang" class="btn btn-whatsapp">Buka WhatsApp & Kirim</button>
+            
+            <p onclick="window.location.reload()" style="margin-top: 15px; font-size: 0.8rem; color: #888; cursor: pointer; text-decoration: underline;">Edit Pesan / Batal</p>
         </div>
     </div>
 
     <script>
-        // --- PENGATURAN NOMOR ---
-        const NOMOR_WA = "6285785218016"; 
-        let urlWhatsApp = "";
-
-        // 1. COUNTDOWN
+        // 1. TIMER
         function updateTimer() {
             const sekarang = new Date();
             let natal = new Date(`December 25, ${sekarang.getFullYear()} 00:00:00`);
             if (sekarang > natal) natal.setFullYear(natal.getFullYear() + 1);
-            
             const selisih = natal - sekarang;
             document.getElementById('days').innerText = Math.floor(selisih / 86400000).toString().padStart(2, '0');
             document.getElementById('hours').innerText = Math.floor((selisih / 3600000) % 24).toString().padStart(2, '0');
@@ -185,32 +166,34 @@
         setInterval(updateTimer, 1000);
         updateTimer();
 
-        // 2. LOGIKA TOMBOL
-        const formNatal = document.getElementById('waForm');
-        const sectionForm = document.getElementById('formSection');
-        const sectionConfirm = document.getElementById('confirmSection');
-        const btnFinalKirim = document.getElementById('btnKirimWA');
+        // 2. LOGIKA KIRIM
+        let finalUrl = "";
 
-        formNatal.addEventListener('submit', function(e) {
+        document.getElementById('waForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            let nomor = document.getElementById('nomorTujuan').value.replace(/\D/g, ''); // Ambil angka saja
             const nama = document.getElementById('nama').value;
             const pesan = document.getElementById('pesan').value;
-            
-            // Format pesan
-            const teks = `Halo! 🎄%0A%0ANama: *${nama}*%0AUcapan: _${pesan}_%0A%0ASelamat Natal! ✨`;
-            urlWhatsApp = `https://api.whatsapp.com/send?phone=${NOMOR_WA}&text=${teks}`;
-            
-            // Ganti tampilan
-            sectionForm.style.display = 'none';
-            sectionConfirm.style.display = 'block';
+
+            // Validasi & Format Nomor (Ubah 08 jadi 628)
+            if (nomor.startsWith('0')) {
+                nomor = '62' + nomor.slice(1);
+            }
+
+            const teks = `Halo! 🎄%0A%0A*${pesan}*%0A%0A- Dari: *${nama}*%0A%0A✨ Selamat Natal ✨`;
+            finalUrl = `https://api.whatsapp.com/send?phone=${nomor}&text=${teks}`;
+
+            // Sembunyikan form, tampilkan konfirmasi
+            document.getElementById('formSection').style.display = 'none';
+            document.getElementById('confirmSection').style.display = 'block';
         });
 
-        btnFinalKirim.addEventListener('click', function() {
-            window.open(urlWhatsApp, '_blank');
+        document.getElementById('btnKirimSekarang').addEventListener('click', function() {
+            window.open(finalUrl, '_blank');
         });
 
-        // 3. SNOW EFFECT
+        // 3. SNOW
         setInterval(() => {
             const snow = document.createElement('div');
             snow.className = 'snow';
